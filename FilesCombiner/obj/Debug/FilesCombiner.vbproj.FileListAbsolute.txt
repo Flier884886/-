@@ -1,0 +1,17 @@
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\bin\Debug\FilesCombiner.exe.config
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\bin\Debug\FilesCombiner.exe
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\bin\Debug\FilesCombiner.pdb
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\bin\Debug\FilesCombiner.xml
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\obj\Debug\FilesCombiner.vbproj.AssemblyReference.cache
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\obj\Debug\FilesCombiner.Form1.resources
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\obj\Debug\FilesCombiner.Resources.resources
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\obj\Debug\FilesCombiner.vbproj.GenerateResource.cache
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\obj\Debug\FilesCombiner.vbproj.CoreCompileInputs.cache
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\obj\Debug\FilesCombiner.exe
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\obj\Debug\FilesCombiner.xml
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\obj\Debug\FilesCombiner.pdb
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\bin\Debug\AdvancedSharpAdbClient.dll
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\bin\Debug\Microsoft.Bcl.HashCode.dll
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\bin\Debug\AdvancedSharpAdbClient.xml
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\bin\Debug\Microsoft.Bcl.HashCode.xml
+C:\Users\Admin\Desktop\Studio\VB\FilesCombiner\obj\Debug\FilesCombiner.vbproj.CopyComplete

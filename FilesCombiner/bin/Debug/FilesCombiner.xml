@@ -1,0 +1,37 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+FilesCombiner
+</name>
+</assembly>
+<members>
+<member name="T:FilesCombiner.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FilesCombiner.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FilesCombiner.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="M:FilesCombiner.Form1.FindAdbPath">
+ <summary>
+ 查找 adb.exe，范围包括：程序目录、当前工作目录、PATH 环境变量、常见安装目录
+ </summary>
+ <returns>找到则返回完整路径，否则返回 Nothing</returns>
+</member>
+<member name="M:FilesCombiner.Form1.TryFindAdbIn(System.String)">
+ <summary>
+ 在指定目录下尝试找 adb.exe，找到返回完整路径，否则 Nothing
+ </summary>
+</member>
+</members>
+</doc>
