@@ -6,6 +6,7 @@ Imports System.Text.RegularExpressions
 Imports AdvancedSharpAdbClient.Receivers
 Imports System.Reflection
 Imports System.Security.Cryptography
+Imports System.Security.Policy
 
 Public Class Form1
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -34,6 +35,55 @@ Public Class Form1
         Next
 
         MsgBox("ok")
+    End Sub
+
+    Private Sub TextBox1_DragEnter(sender As Object, e As DragEventArgs) Handles TextBox1.DragEnter
+        If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.None
+            Return
+        End If
+        Dim paths() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+        ' 只有当所有拖入项都是文件夹时，才允许放下
+        If paths IsNot Nothing AndAlso paths.Length > 0 AndAlso paths.All(Function(p) IO.Directory.Exists(p)) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub TextBox1_DragDrop(sender As Object, e As DragEventArgs) Handles TextBox1.DragDrop
+        Dim paths() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+        If paths Is Nothing OrElse paths.Length = 0 Then Return
+        ' 再次过滤，确保只保留文件夹
+        Dim folders = paths.Where(Function(p) IO.Directory.Exists(p)).ToArray()
+        If folders.Length = 0 Then Return
+        ' 多行显示，每行一个路径
+        TextBox1.Text = TextBox1.Text & vbCrLf & String.Join(Environment.NewLine, folders)
+    End Sub
+
+    Private Sub TextBox2_DragEnter(sender As Object, e As DragEventArgs) Handles TextBox2.DragEnter
+        If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.None
+            Return
+        End If
+        Dim paths() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+        ' 只要有一个是文件夹，就允许放下（文件会被忽略）
+        If paths IsNot Nothing AndAlso paths.Any(Function(p) IO.Directory.Exists(p)) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub TextBox2_DragDrop(sender As Object, e As DragEventArgs) Handles TextBox2.DragDrop
+        Dim paths() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+        If paths Is Nothing OrElse paths.Length = 0 Then Return
+
+        ' 取第一个文件夹，忽略文件和其余项
+        Dim firstFolder = paths.FirstOrDefault(Function(p) IO.Directory.Exists(p))
+        If firstFolder IsNot Nothing Then
+            TextBox2.Text = firstFolder
+        End If
     End Sub
 
     Public Function GetAfterEffect_Filename(ByRef FileInf As System.IO.FileInfo, Optional AddIndex As String = "")
@@ -352,6 +402,8 @@ Public Class Form1
         Dim devices = adbClient.GetDevices()
         If devices.Count = 0 Then ADB_Logging("没有已连接的设备") : Return
         ADB_Logging("开始尝试拉取数据")
+        Dim tempDir As String = Path.Combine(Path.GetTempPath(), "Wechat_status_puller_temp") '创建临时文件夹
+        Directory.CreateDirectory(tempDir)
         For Each device In devices '遍历设备进行批量操作
             For Each UserID In GetUserIdStrings(device) '遍历设备的每个用户
                 Dim NowPath As String = "/storage/emulated/" & UserID & "/"
@@ -363,12 +415,10 @@ Public Class Form1
                             If SubDict.Length = 32 Then '确认长度为32个十六进制，是用户文件夹
                                 NowPath &= SubDict & "/textstatus" '微信状态媒体存储位置
                                 If IsRemotePathAccessible(device, NowPath) Then '可以访问
-                                    Dim tempDir As String = Path.Combine(Path.GetTempPath(), "Wechat_status_puller_temp")
-                                    Directory.CreateDirectory(tempDir)
                                     If PullDict(NowPath, tempDir) Then '拉取成功
                                         'Try
-                                        Dim RecDir = System.IO.Directory.CreateDirectory(tempDir & "/RecycleBinTemp")
-                                        CopyCopy(New System.IO.DirectoryInfo(tempDir & "/textstatus"), TextBox2.Text, RecDir)
+                                        Dim RecDir = System.IO.Directory.CreateDirectory(tempDir & "\RecycleBinTemp")
+                                        CopyCopy(New System.IO.DirectoryInfo(tempDir & "\textstatus"), TextBox2.Text, RecDir)
                                         ADB_Logging("拉取[ " & NowPath & " ]: 成功")
                                         If DelRemoteFile.Checked Then '需要删除手机数据
                                             If DeleteRemoteDirectory(device, NowPath) Then
@@ -382,8 +432,10 @@ Public Class Form1
                                         'Exit Sub
                                         'End Try
                                     End If
-                                    '临时文件夹拉去回收站
-                                    My.Computer.FileSystem.DeleteDirectory(tempDir, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin)
+                                    '临时textstatus文件夹拉去回收站
+                                    If System.IO.Directory.Exists(tempDir & "\textstatus") Then
+                                        My.Computer.FileSystem.DeleteDirectory(tempDir & "\textstatus", UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin)
+                                    End If
                                 End If
                             End If
                         Next
@@ -395,11 +447,21 @@ Public Class Form1
                 End If
             Next
         Next
+        ADB_Logging("清理临时文件")
+        My.Computer.FileSystem.DeleteDirectory(tempDir, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin)
         ADB_Logging("数据拉取完成")
 
 
         'Catch ex As Exception
         '   MsgBox(ex.Message)
         'End Try
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Try
+            Process.Start("https://developer.android.google.cn/tools/releases/platform-tools?hl=zh-cn")
+        Catch ex As Exception
+            MessageBox.Show($"无法打开链接：{ex.Message}")
+        End Try
     End Sub
 End Class

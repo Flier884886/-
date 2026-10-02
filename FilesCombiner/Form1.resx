@@ -123,4 +123,12 @@
   <metadata name="FolderS2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>190, 14</value>
   </metadata>
+  <data name="TextBox4.Text" xml:space="preserve">
+    <value>开发者：MasterChen
+1. 本工具开源免费，付费或变相付费的都是盗版，欢迎举报！
+2. 本工具原理是拉取安卓手机微信状态的缓存目录，经测试，媒体文件均未加密，且数据完备，可以直接使用。
+3. adb快捷拉取能够批量拉取多台设备多个用户的缓存 ( 前提是adb权限下能够访问对应用户的缓存且该用户安装并登录了微信 ) 。
+4. 本地操作和文件夹选取支持拖动文件夹到对应的文本框，本工具将自动添加路径。
+5. 本工具仅供个人学习与方便查看自己设备上的缓存内容使用。请勿用于任何侵犯他人隐私、版权或其他违法违规用途。使用本工具产生的一切后果由使用者自行承担。</value>
+  </data>
 </root>
